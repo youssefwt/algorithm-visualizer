@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-// let bars = [100, 90, 20, 40, 15, 50, 70, 90, 100, 10, 30, 46, 80, 30, 60];
-
+/**generating random array */
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -10,26 +8,53 @@ function getRandomInt(min, max) {
 let barNum = 30;
 
 let bars = Array.from({ length: barNum }, () => getRandomInt(20, 400));
+/************************************************************************************* */
 
-// let bars = [];
+/**global sorting variables */
+let isSorting = false;
+let sorted = false;
+/***************************************************************************************** */
 
+/**bubble sort variables */
+let isBubble = false;
 let outer = 0;
 let inner = outer + 1;
-
 let outerEl = bars && bars[outer];
 let innerEl = bars && bars[inner];
+/*************************************************************************************** */
+
+/**global search variables */
+let foundNumber = null;
+let isSearching = false;
+/**************************************************************************************** */
+
+/**linear search variables */
+let isLinear = false;
+let linearFoundIndex = null;
+let linearIndex = -1;
+
+/**************************************************************************************** */
 
 export const barsSlice = createSlice({
   name: "bars",
   initialState: {
     bars,
+    isBubble,
+    isLinear,
+    isSearching,
     outer,
     inner,
     outerEl,
     innerEl,
     barNum,
+    foundNumber,
+    linearIndex,
+    linearFoundIndex,
+    isSorting,
+    sorted,
   },
   reducers: {
+    /**set bars number */
     setBarNum: (state, action) => {
       state.bars = Array.from({ length: action.payload }, () =>
         getRandomInt(20, 400)
@@ -39,7 +64,22 @@ export const barsSlice = createSlice({
       state.outerEl = state.bars[state.outer];
       state.innerEl = state.bars[state.inner];
     },
+    /********************************************************************* */
+
+    /**stop actions */
+    stopActions: (state) => {
+      state.isBubble = false;
+      state.foundNumber = null;
+      state.isLinear = false;
+      state.linearIndex = -1;
+      state.linearFoundIndex = null;
+    },
+    /******************************************************************** */
+
+    /**bubble sort */
     bubbleSorter: (state) => {
+      state.isSearching = false;
+      state.isBubble = true;
       if (state.outer < state.bars.length) {
         if (state.outerEl > state.innerEl) {
           state.bars[state.outer] = state.innerEl;
@@ -58,8 +98,30 @@ export const barsSlice = createSlice({
         }
       }
     },
+    /************************************************************************* */
+
+    /**linear search */
+    linearSearcher: (state, action) => {
+      state.isSearching = true;
+      state.isLinear = true;
+      if (state.linearIndex < state.bars.length) {
+        if (action.payload === state.bars[state.linearIndex]) {
+          state.foundNumber = state.bars[state.linearIndex];
+          state.linearFoundIndex = state.linearIndex;
+        }
+        state.linearIndex++;
+      }
+    },
+    /************************************************************************ */
   },
 });
-export const { bubbleSorter, fillBubbleSort, setBarNum } = barsSlice.actions;
+
+export const {
+  bubbleSorter,
+  fillBubbleSort,
+  setBarNum,
+  linearSearcher,
+  stopActions,
+} = barsSlice.actions;
 
 export default barsSlice.reducer;

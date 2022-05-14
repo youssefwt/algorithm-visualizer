@@ -7,21 +7,25 @@ export const Container = styled.div`
 
 export const StyledBar = styled.div`
   display: inline-block;
-  background-color: ${({ i, outer, inner, lastIndex }) =>
-    i < outer
+  background-color: ${({ i, outer, inner, lastIndex, isBubble }) =>
+    i < outer && isBubble
       ? "lightgreen"
-      : i === outer && i !== lastIndex
+      : i === outer && i !== lastIndex && isBubble
       ? "yellow"
-      : i === inner
+      : i === inner && isBubble
       ? "turquoise"
       : outer === lastIndex
       ? "lightgreen"
       : "bisque"};
-  /* background-color: bisque; */
+  border: ${({ i, linearIndex, linearFoundIndex, isLinear, isSearching }) =>
+    i === linearFoundIndex && isLinear && isSearching
+      ? `2px solid green`
+      : i === linearIndex && !linearFoundIndex && isLinear && isSearching
+      ? `1px solid red`
+      : `none`};
   margin: 0 2px;
   padding-top: ${({ bar }) => `${bar}px`};
-  /* width: 1.2rem; */
-  /* writing-mode: vertical-lr; */
+
   writing-mode: tb-rl;
   transform: rotate(-180deg);
   align-self: flex-end;

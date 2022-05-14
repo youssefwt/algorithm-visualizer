@@ -4,12 +4,26 @@ import { Bar } from "../Bar/Bar";
 import { Container } from "./bars.styled";
 
 export const Bars = () => {
-  const { bars, outer, inner } = useSelector((state) => state.barsSlice);
+  const {
+    bars,
+    outer,
+    inner,
+    isBubble,
+    linearIndex,
+    linearFoundIndex,
+    isLinear,
+    isSearching,
+  } = useSelector((state) => state.barsSlice);
 
   return (
     <Container>
       {bars.map((bar, index) => (
         <Bar
+          isSearching={isSearching}
+          isLinear={isLinear}
+          linearFoundIndex={linearFoundIndex}
+          linearIndex={linearIndex}
+          isBubble={isBubble}
           lastIndex={bars.length - 1}
           outer={outer}
           inner={inner}
