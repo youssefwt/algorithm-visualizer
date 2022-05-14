@@ -2,18 +2,19 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
-  border: 1px solid green;
+  flex-direction: column;
 `;
 
 export const StyledBar = styled.div`
-  display: inline-block;
+  /* display: inline-block; */
+
   background-color: ${({ i, outer, inner, lastIndex, isBubble }) =>
     i < outer && isBubble
       ? "lightgreen"
       : i === outer && i !== lastIndex && isBubble
       ? "yellow"
       : i === inner && isBubble
-      ? "turquoise"
+      ? "lightblue"
       : outer === lastIndex
       ? "lightgreen"
       : "bisque"};

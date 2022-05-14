@@ -1,6 +1,13 @@
 import React, { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Button, NotFoundMessage } from "./aside.styled";
+import {
+  Container,
+  Button,
+  FoundMessage,
+  Label,
+  SortContianer,
+  SearchContianer,
+} from "./aside.styled";
 import {
   bubbleSorter,
   stopActions,
@@ -82,20 +89,39 @@ export const Aside = () => {
 
   return (
     <Container>
-      <Button onClick={bubbleSort}>bubble sort</Button>
-      <input type="text" onChange={(e) => getSearchFor(e.target.value)} />
-      <Button onClick={linearSearch}>linear search</Button>
-      <NotFoundMessage notFound={notFound.current}>not found</NotFoundMessage>
-
+      <br />
+      <br />
+      <Label option="block">Choose number of bars</Label>
       <br />
       <input
+        className="range"
         type="range"
-        defaultValue="25"
-        max="47"
-        min="5"
+        defaultValue="30"
+        max="55"
+        min="3"
         step="1"
         onChange={(e) => setNum(e.target.value)}
       />
+      <br />
+      <p>-------------------------------------</p>
+      <SortContianer>
+        <Button onClick={bubbleSort}>Bubble sort</Button>
+      </SortContianer>
+      <p>-------------------------------------</p>
+      <SearchContianer>
+        <div>
+          <Label option="inline">Search for: </Label>
+          <input
+            style={{ width: "40px", display: "inline", textAlign: "center" }}
+            type="text"
+            onChange={(e) => getSearchFor(e.target.value)}
+          />
+        </div>
+      </SearchContianer>
+
+      <Button onClick={linearSearch}>Linear search</Button>
+      <Button>Binary search</Button>
+      <FoundMessage notFound={notFound.current}>not found</FoundMessage>
     </Container>
   );
 };

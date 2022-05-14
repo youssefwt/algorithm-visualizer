@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Bar } from "../Bar/Bar";
-import { Container } from "./bars.styled";
+import { Container, Arrow, BarsContainer } from "./bars.styled";
 
 export const Bars = () => {
   const {
@@ -18,21 +18,24 @@ export const Bars = () => {
   return (
     <Container>
       {bars.map((bar, index) => (
-        <Bar
-          isSearching={isSearching}
-          isLinear={isLinear}
-          linearFoundIndex={linearFoundIndex}
-          linearIndex={linearIndex}
-          isBubble={isBubble}
-          lastIndex={bars.length - 1}
-          outer={outer}
-          inner={inner}
-          i={index}
-          bar={bars[index]}
-          key={index}
-        >
-          {bar}
-        </Bar>
+        <BarsContainer>
+          <Arrow i={index} linearFoundIndex={linearFoundIndex} />
+          <Bar
+            isSearching={isSearching}
+            isLinear={isLinear}
+            linearFoundIndex={linearFoundIndex}
+            linearIndex={linearIndex}
+            isBubble={isBubble}
+            lastIndex={bars.length - 1}
+            outer={outer}
+            inner={inner}
+            i={index}
+            bar={bars[index]}
+            key={index}
+          >
+            {bar}
+          </Bar>
+        </BarsContainer>
       ))}
     </Container>
   );

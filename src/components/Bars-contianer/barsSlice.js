@@ -7,7 +7,7 @@ function getRandomInt(min, max) {
 }
 let barNum = 30;
 
-let bars = Array.from({ length: barNum }, () => getRandomInt(20, 400));
+let bars = Array.from({ length: barNum }, () => getRandomInt(20, 450));
 /************************************************************************************* */
 
 /**global sorting variables */
