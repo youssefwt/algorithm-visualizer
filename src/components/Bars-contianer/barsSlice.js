@@ -5,7 +5,7 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-let barNum = 30;
+let barNum = 5;
 
 function getRandomArray() {
   return Array.from({ length: barNum }, () => getRandomInt(20, 450));
@@ -41,6 +41,14 @@ let linearIndex = -1;
 
 /**************************************************************************************** */
 
+/**Binary search variable */
+let isBinary = false;
+let start = 0;
+let end = bars.length - 1;
+let median = Math.floor((end - start) / 2);
+let binaryFoundIndex = null;
+/****************************************************************************************** */
+
 export const barsSlice = createSlice({
   name: "bars",
   initialState: {
@@ -60,6 +68,11 @@ export const barsSlice = createSlice({
     linearFoundIndex,
     isSorting,
     sorted,
+    start,
+    end,
+    median,
+    binaryFoundIndex,
+    isBinary,
   },
   reducers: {
     /**set bars number */
@@ -83,6 +96,9 @@ export const barsSlice = createSlice({
       state.isLinear = false;
       state.linearIndex = -1;
       state.linearFoundIndex = null;
+      state.start = 0;
+      state.end = bars.length - 1;
+      state.median = Math.floor((end - start) / 2);
     },
     /******************************************************************** */
 
@@ -157,6 +173,7 @@ export const barsSlice = createSlice({
     linearSearcher: (state, action) => {
       state.isSearching = true;
       state.isLinear = true;
+
       if (state.linearIndex < state.bars.length) {
         if (action.payload === state.bars[state.linearIndex]) {
           state.foundNumber = state.bars[state.linearIndex];
@@ -166,6 +183,32 @@ export const barsSlice = createSlice({
       }
     },
     /************************************************************************ */
+
+    /**Binary search */
+    binarySearcher: (state, action) => {
+      state.isSearching = true;
+      state.isBinary = true;
+
+      if (state.start <= state.end) {
+        state.median = state.start + Math.floor((state.end - state.start) / 2);
+        if (action.payload === state.bars[state.median]) {
+          console.log("payload = median");
+          state.foundNumber = state.bars[state.median];
+          state.binaryFoundIndex = state.median;
+          console.log(state.binaryFoundIndex);
+        } else if (state.bars[state.median] < action.payload) {
+          console.log("median < payload");
+          state.start = state.median + 1;
+        } else {
+          console.log("median > payload");
+          state.end = state.median - 1;
+        }
+      } else {
+        state.foundNumber = "not-found";
+      }
+    },
+
+    /*********************************************************************** */
   },
 });
 
@@ -175,6 +218,7 @@ export const {
   setBarNum,
   linearSearcher,
   stopActions,
+  binarySearcher,
 } = barsSlice.actions;
 
 export default barsSlice.reducer;

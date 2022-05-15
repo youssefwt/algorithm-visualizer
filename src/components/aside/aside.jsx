@@ -13,6 +13,7 @@ import {
   stopActions,
   setBarNum,
   linearSearcher,
+  binarySearcher,
 } from "../Bars-contianer/barsSlice";
 import { useState } from "react";
 
@@ -33,7 +34,7 @@ export const Aside = () => {
   const setNum = (input) => {
     dispatch(stopActions("range"));
     dispatch(setBarNum(input * 1));
-
+    setSearchFor(null);
     clearIntervals();
   };
   /************************************************************* */
@@ -57,7 +58,7 @@ export const Aside = () => {
     // dispatch(bubbleSorter(v));
     setInterval(() => {
       dispatch(bubbleSorter(v));
-    }, 50);
+    }, 100);
   };
 
   if (sorted) {
@@ -67,6 +68,7 @@ export const Aside = () => {
 
   /**linear search */
   const linearSearch = () => {
+    notFound.current = false;
     dispatch(stopActions());
     clearIntervals();
     if (searchFor) {
@@ -79,6 +81,7 @@ export const Aside = () => {
   if (linearIndex === bars.length && !foundNumber && isSearching) {
     console.log("not found");
     notFound.current = true;
+    clearIntervals();
   }
 
   if (foundNumber && isSearching) {
@@ -86,6 +89,25 @@ export const Aside = () => {
   }
 
   /*****************************************************************************************/
+
+  /**binarySearcher */
+  const binarySearch = () => {
+    notFound.current = false;
+    dispatch(stopActions());
+    clearIntervals();
+    if (searchFor) {
+      setInterval(() => {
+        dispatch(binarySearcher(searchFor * 1));
+      }, 800);
+    }
+  };
+
+  if (foundNumber && isSearching) {
+    if (foundNumber === "not-found") notFound.current = true;
+    console.log(foundNumber);
+    clearIntervals();
+  }
+  /************************************** */
 
   return (
     <Container>
@@ -104,12 +126,12 @@ export const Aside = () => {
         onChange={(e) => setNum(e.target.value)}
       />
       <br />
-      <p>-------------------------------------</p>
+      <p>--------------------------------</p>
       <SortContianer>
         <Button onClick={() => bubbleSort("sv1")}>Bubble sort V1</Button>
         <Button onClick={() => bubbleSort("sv2")}>Bubble sort V2</Button>
       </SortContianer>
-      <p>-------------------------------------</p>
+      <p>--------------------------------</p>{" "}
       <SearchContianer>
         <div>
           <Label option="inline">Search for: </Label>
@@ -119,11 +141,11 @@ export const Aside = () => {
             onChange={(e) => getSearchFor(e.target.value)}
           />
         </div>
+        <Button onClick={linearSearch}>Linear search</Button>
+        <Button onClick={binarySearch}>Binary search</Button>
+        <FoundMessage notFound={notFound.current}>not found</FoundMessage>
       </SearchContianer>
-
-      <Button onClick={linearSearch}>Linear search</Button>
-      <Button>Binary search</Button>
-      <FoundMessage notFound={notFound.current}>not found</FoundMessage>
+      <p>--------------------------------</p>
     </Container>
   );
 };
