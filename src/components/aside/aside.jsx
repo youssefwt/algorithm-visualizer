@@ -18,7 +18,7 @@ import { useState } from "react";
 
 export const Aside = () => {
   /*get bars from store, and local states */
-  const { bars, foundNumber, linearIndex, isSearching } = useSelector(
+  const { bars, foundNumber, linearIndex, isSearching, sorted } = useSelector(
     (state) => state.barsSlice
   );
   const [searchFor, setSearchFor] = useState(null);
@@ -31,7 +31,7 @@ export const Aside = () => {
 
   /*choose bars number */
   const setNum = (input) => {
-    dispatch(stopActions());
+    dispatch(stopActions("range"));
     dispatch(setBarNum(input * 1));
 
     clearIntervals();
@@ -51,18 +51,18 @@ export const Aside = () => {
   /**************************************************************** */
 
   /**bubble sort */
-  const bubbleSort = () => {
-    dispatch(stopActions());
+  const bubbleSort = (v) => {
+    dispatch(stopActions(v));
     clearIntervals();
-    // dispatch(bubbleSorter());
-    let t = setInterval(() => {
-      dispatch(bubbleSorter());
-    }, 80);
-
-    setTimeout(() => {
-      clearInterval(t);
-    }, bars.length * bars.length * 100);
+    // dispatch(bubbleSorter(v));
+    setInterval(() => {
+      dispatch(bubbleSorter(v));
+    }, 50);
   };
+
+  if (sorted) {
+    clearIntervals();
+  }
   /***************************************************************** */
 
   /**linear search */
@@ -90,6 +90,7 @@ export const Aside = () => {
   return (
     <Container>
       <br />
+      {sorted && <p>sorted</p>}
       <br />
       <Label option="block">Choose number of bars</Label>
       <br />
@@ -105,7 +106,8 @@ export const Aside = () => {
       <br />
       <p>-------------------------------------</p>
       <SortContianer>
-        <Button onClick={bubbleSort}>Bubble sort</Button>
+        <Button onClick={() => bubbleSort("sv1")}>Bubble sort V1</Button>
+        <Button onClick={() => bubbleSort("sv2")}>Bubble sort V2</Button>
       </SortContianer>
       <p>-------------------------------------</p>
       <SearchContianer>

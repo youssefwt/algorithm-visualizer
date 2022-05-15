@@ -7,7 +7,11 @@ function getRandomInt(min, max) {
 }
 let barNum = 30;
 
-let bars = Array.from({ length: barNum }, () => getRandomInt(20, 450));
+function getRandomArray() {
+  return Array.from({ length: barNum }, () => getRandomInt(20, 450));
+}
+
+let bars = getRandomArray();
 /************************************************************************************* */
 
 /**global sorting variables */
@@ -17,6 +21,8 @@ let sorted = false;
 
 /**bubble sort variables */
 let isBubble = false;
+let bubbleV = null;
+let loops = 0;
 let outer = 0;
 let inner = outer + 1;
 let outerEl = bars && bars[outer];
@@ -40,6 +46,8 @@ export const barsSlice = createSlice({
   initialState: {
     bars,
     isBubble,
+    bubbleV,
+    loops,
     isLinear,
     isSearching,
     outer,
@@ -67,7 +75,9 @@ export const barsSlice = createSlice({
     /********************************************************************* */
 
     /**stop actions */
-    stopActions: (state) => {
+    stopActions: (state, action) => {
+      if (action.payload === "range") state.sorted = false;
+      state.loops = 0;
       state.isBubble = false;
       state.foundNumber = null;
       state.isLinear = false;
@@ -76,25 +86,68 @@ export const barsSlice = createSlice({
     },
     /******************************************************************** */
 
-    /**bubble sort */
-    bubbleSorter: (state) => {
-      state.isSearching = false;
-      state.isBubble = true;
-      if (state.outer < state.bars.length) {
-        if (state.outerEl > state.innerEl) {
-          state.bars[state.outer] = state.innerEl;
-          state.bars[state.inner] = state.outerEl;
-          state.outerEl = state.bars[state.outer];
+    /**bubble sort varient 2 */
+    bubbleSorter: (state, action) => {
+      /**  v2 */
+      if (action.payload === "sv2") {
+        state.bubbleV = 2;
+        state.isSearching = false;
+        state.isBubble = true;
+        if (state.outer < state.bars.length && !state.sorted) {
+          if (state.outerEl > state.innerEl) {
+            state.bars[state.outer] = state.innerEl;
+            state.bars[state.inner] = state.outerEl;
+            state.outerEl = state.bars[state.outer];
+            state.innerEl = state.bars[state.inner];
+          }
+          state.inner++;
           state.innerEl = state.bars[state.inner];
-        }
-        state.inner++;
-        state.innerEl = state.bars[state.inner];
 
-        if (state.inner === state.bars.length) {
-          state.outer++;
-          state.outerEl = state.bars[state.outer];
-          state.inner = state.outer + 1;
-          state.innerEl = state.bars[state.inner];
+          if (state.inner === state.bars.length) {
+            console.log(state.loops);
+            state.loops++;
+            console.log(state.loops);
+
+            state.outer++;
+            state.outerEl = state.bars[state.outer];
+            state.inner = state.outer + 1;
+            state.innerEl = state.bars[state.inner];
+            if (state.loops === state.bars.length - 1) {
+              state.sorted = true;
+              console.log(state.sorted);
+            }
+          }
+        }
+        /******************************************************************************************** */
+        /**  v1 */
+      } else if (action.payload === "sv1") {
+        state.bubbleV = 1;
+        state.isSearching = false;
+        state.isBubble = true;
+
+        if (state.loops < state.bars.length - 1 && !state.sorted) {
+          if (state.outerEl > state.innerEl) {
+            state.bars[state.outer] = state.innerEl;
+            state.bars[state.inner] = state.outerEl;
+            state.outerEl = state.bars[state.outer];
+            state.innerEl = state.bars[state.inner];
+          }
+          if (state.inner === state.bars.length - (state.loops + 1)) {
+            state.loops++;
+            state.outer = 0;
+            state.outerEl = state.bars[state.outer];
+            state.inner = state.outer + 1;
+            state.innerEl = state.bars[state.inner];
+            if (state.loops === state.bars.length - 1) {
+              state.sorted = true;
+              console.log(state.sorted);
+            }
+          } else {
+            state.outer++;
+            state.outerEl = state.bars[state.outer];
+            state.inner++;
+            state.innerEl = state.bars[state.inner];
+          }
         }
       }
     },

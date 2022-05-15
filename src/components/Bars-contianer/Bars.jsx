@@ -13,14 +13,18 @@ export const Bars = () => {
     linearFoundIndex,
     isLinear,
     isSearching,
+    sorted,
+    bubbleV,
   } = useSelector((state) => state.barsSlice);
 
   return (
     <Container>
       {bars.map((bar, index) => (
-        <BarsContainer>
+        <BarsContainer key={index}>
           <Arrow i={index} linearFoundIndex={linearFoundIndex} />
           <Bar
+            bubbleV={bubbleV}
+            sorted={sorted}
             isSearching={isSearching}
             isLinear={isLinear}
             linearFoundIndex={linearFoundIndex}
@@ -31,7 +35,6 @@ export const Bars = () => {
             inner={inner}
             i={index}
             bar={bars[index]}
-            key={index}
           >
             {bar}
           </Bar>

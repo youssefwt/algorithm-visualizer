@@ -25,10 +25,10 @@ export const SortContianer = styled.div`
 `;
 
 export const Button = styled.button`
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
 
-  margin: 1rem;
+  margin: 0.5rem;
   cursor: pointer;
   &:active {
     transform: scale(0.9);

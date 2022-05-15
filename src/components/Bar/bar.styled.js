@@ -8,8 +8,16 @@ export const Container = styled.div`
 export const StyledBar = styled.div`
   /* display: inline-block; */
 
-  background-color: ${({ i, outer, inner, lastIndex, isBubble }) =>
-    i < outer && isBubble
+  background-color: ${({
+    i,
+    outer,
+    inner,
+    lastIndex,
+    isBubble,
+    bubbleV,
+    sorted,
+  }) =>
+    (i < outer && isBubble && bubbleV !== 1) || sorted
       ? "lightgreen"
       : i === outer && i !== lastIndex && isBubble
       ? "yellow"
@@ -18,6 +26,7 @@ export const StyledBar = styled.div`
       : outer === lastIndex
       ? "lightgreen"
       : "bisque"};
+
   border: ${({ i, linearIndex, linearFoundIndex, isLinear, isSearching }) =>
     i === linearFoundIndex && isLinear && isSearching
       ? `2px solid green`
