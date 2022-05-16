@@ -74,7 +74,7 @@ export const Aside = () => {
     if (searchFor) {
       setInterval(() => {
         dispatch(linearSearcher(searchFor * 1));
-      }, 800);
+      }, 500);
     }
   };
 
@@ -96,9 +96,10 @@ export const Aside = () => {
     dispatch(stopActions());
     clearIntervals();
     if (searchFor) {
-      setInterval(() => {
-        dispatch(binarySearcher(searchFor * 1));
-      }, 800);
+      // setInterval(() => {
+      //   dispatch(binarySearcher(searchFor * 1));
+      // }, 500);
+      dispatch(binarySearcher(searchFor * 1));
     }
   };
 

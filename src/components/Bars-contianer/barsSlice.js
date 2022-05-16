@@ -7,11 +7,11 @@ function getRandomInt(min, max) {
 }
 let barNum = 5;
 
-function getRandomArray() {
+function getRandomArray(barNum) {
   return Array.from({ length: barNum }, () => getRandomInt(20, 450));
 }
 
-let bars = getRandomArray();
+let bars = getRandomArray(barNum);
 /************************************************************************************* */
 
 /**global sorting variables */
@@ -43,10 +43,15 @@ let linearIndex = -1;
 
 /**Binary search variable */
 let isBinary = false;
+/////////////////////////////////////////how to init ??
 let start = 0;
 let end = bars.length - 1;
 let median = Math.floor((end - start) / 2);
 let binaryFoundIndex = null;
+// let start = 0;
+// let end = null;
+// let median = null;
+// let binaryFoundIndex = null;
 /****************************************************************************************** */
 
 export const barsSlice = createSlice({
@@ -77,13 +82,16 @@ export const barsSlice = createSlice({
   reducers: {
     /**set bars number */
     setBarNum: (state, action) => {
-      state.bars = Array.from({ length: action.payload }, () =>
-        getRandomInt(20, 400)
-      );
+      state.bars = getRandomArray(action.payload);
       state.outer = 0;
       state.inner = state.outer + 1;
       state.outerEl = state.bars[state.outer];
       state.innerEl = state.bars[state.inner];
+      /////////////////////////////////////////how to init ??
+      state.start = 0;
+      state.end = state.bars.length - 1; //here now !!!
+      state.median = Math.floor((state.end - state.start) / 2);
+      state.binaryFoundIndex = null;
     },
     /********************************************************************* */
 
@@ -96,9 +104,13 @@ export const barsSlice = createSlice({
       state.isLinear = false;
       state.linearIndex = -1;
       state.linearFoundIndex = null;
-      state.start = 0;
-      state.end = bars.length - 1;
-      state.median = Math.floor((end - start) / 2);
+      /////////////////////////////////////////how to init ??
+      if (state.binaryFoundIndex) {
+        state.start = 0;
+        state.end = state.bars.length - 1; //here now !!!
+        state.median = Math.floor((state.end - state.start) / 2);
+        state.binaryFoundIndex = null;
+      }
     },
     /******************************************************************** */
 
@@ -189,22 +201,31 @@ export const barsSlice = createSlice({
       state.isSearching = true;
       state.isBinary = true;
 
-      if (state.start <= state.end) {
-        state.median = state.start + Math.floor((state.end - state.start) / 2);
-        if (action.payload === state.bars[state.median]) {
-          console.log("payload = median");
-          state.foundNumber = state.bars[state.median];
-          state.binaryFoundIndex = state.median;
-          console.log(state.binaryFoundIndex);
-        } else if (state.bars[state.median] < action.payload) {
-          console.log("median < payload");
-          state.start = state.median + 1;
+      console.log(state.bars[0]);
+      console.log(state.start);
+      console.log(state.end);
+      console.log(state.median);
+      if (state.sorted) {
+        if (state.start <= state.end) {
+          state.median =
+            state.start + Math.floor((state.end - state.start) / 2);
+          if (action.payload === state.bars[state.median]) {
+            console.log("payload = median");
+            state.foundNumber = state.bars[state.median];
+            state.binaryFoundIndex = state.median;
+            console.log(state.binaryFoundIndex);
+          } else if (state.bars[state.median] < action.payload) {
+            console.log("median < payload");
+            state.start = state.median + 1;
+            //what about the rest X
+          } else {
+            console.log("median > payload");
+            state.end = state.median - 1;
+            //what about the rest X
+          }
         } else {
-          console.log("median > payload");
-          state.end = state.median - 1;
+          state.foundNumber = "not-found";
         }
-      } else {
-        state.foundNumber = "not-found";
       }
     },
 
