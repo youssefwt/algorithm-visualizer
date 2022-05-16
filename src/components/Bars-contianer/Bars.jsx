@@ -11,6 +11,11 @@ export const Bars = () => {
     isBubble,
     linearIndex,
     linearFoundIndex,
+    isBinary,
+    binaryFoundIndex,
+    start,
+    end,
+    median,
     isLinear,
     isSearching,
     sorted,
@@ -21,8 +26,20 @@ export const Bars = () => {
     <Container>
       {bars.map((bar, index) => (
         <BarsContainer key={index}>
-          <Arrow i={index} linearFoundIndex={linearFoundIndex} />
+          <Arrow
+            isBinary={isBinary}
+            i={index}
+            linearFoundIndex={linearFoundIndex}
+            median={median}
+            end={end}
+            start={start}
+            binaryFoundIndex={binaryFoundIndex}
+          />
           <Bar
+            median={median}
+            end={end}
+            start={start}
+            binaryFoundIndex={binaryFoundIndex}
             bubbleV={bubbleV}
             sorted={sorted}
             isSearching={isSearching}

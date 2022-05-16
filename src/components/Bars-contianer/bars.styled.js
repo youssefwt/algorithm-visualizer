@@ -34,9 +34,9 @@ export const Arrow = styled.div`
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 10px solid green;
-  display: ${({ i, linearFoundIndex }) =>
-    i === linearFoundIndex ? "block" : "none"};
-  /* animation: ${bounce} 2s ease 0s infinite alternate forwards; */
+  display: ${({ i, linearFoundIndex, binaryFoundIndex }) =>
+    i === linearFoundIndex || i === binaryFoundIndex ? "block" : "none"};
+
   animation: ${bounce} 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite
     alternate both;
 `;

@@ -5,7 +5,7 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-let barNum = 5;
+let barNum = 30;
 
 function getRandomArray(barNum) {
   return Array.from({ length: barNum }, () => getRandomInt(20, 450));
@@ -87,11 +87,13 @@ export const barsSlice = createSlice({
       state.inner = state.outer + 1;
       state.outerEl = state.bars[state.outer];
       state.innerEl = state.bars[state.inner];
-      /////////////////////////////////////////how to init ??
+
       state.start = 0;
       state.end = state.bars.length - 1; //here now !!!
       state.median = Math.floor((state.end - state.start) / 2);
       state.binaryFoundIndex = null;
+      state.isBinary = false;
+      state.isSearching = false;
     },
     /********************************************************************* */
 
@@ -102,9 +104,11 @@ export const barsSlice = createSlice({
       state.isBubble = false;
       state.foundNumber = null;
       state.isLinear = false;
+      state.isBinary = false;
       state.linearIndex = -1;
       state.linearFoundIndex = null;
-      /////////////////////////////////////////how to init ??
+      state.isSearching = false;
+
       if (state.binaryFoundIndex) {
         state.start = 0;
         state.end = state.bars.length - 1; //here now !!!
@@ -116,11 +120,13 @@ export const barsSlice = createSlice({
 
     /**bubble sort varient 2 */
     bubbleSorter: (state, action) => {
+      state.isSearching = false;
+
+      state.isBubble = true;
       /**  v2 */
       if (action.payload === "sv2") {
         state.bubbleV = 2;
-        state.isSearching = false;
-        state.isBubble = true;
+
         if (state.outer < state.bars.length && !state.sorted) {
           if (state.outerEl > state.innerEl) {
             state.bars[state.outer] = state.innerEl;
@@ -150,8 +156,6 @@ export const barsSlice = createSlice({
         /**  v1 */
       } else if (action.payload === "sv1") {
         state.bubbleV = 1;
-        state.isSearching = false;
-        state.isBubble = true;
 
         if (state.loops < state.bars.length - 1 && !state.sorted) {
           if (state.outerEl > state.innerEl) {
@@ -185,13 +189,14 @@ export const barsSlice = createSlice({
     linearSearcher: (state, action) => {
       state.isSearching = true;
       state.isLinear = true;
+      state.isBinary = false;
 
       if (state.linearIndex < state.bars.length) {
         if (action.payload === state.bars[state.linearIndex]) {
           state.foundNumber = state.bars[state.linearIndex];
           state.linearFoundIndex = state.linearIndex;
         }
-        state.linearIndex++;
+        if (!state.linearFoundIndex) state.linearIndex++;
       }
     },
     /************************************************************************ */
@@ -200,6 +205,7 @@ export const barsSlice = createSlice({
     binarySearcher: (state, action) => {
       state.isSearching = true;
       state.isBinary = true;
+      state.isLinear = false;
 
       console.log(state.bars[0]);
       console.log(state.start);
@@ -211,6 +217,7 @@ export const barsSlice = createSlice({
             state.start + Math.floor((state.end - state.start) / 2);
           if (action.payload === state.bars[state.median]) {
             console.log("payload = median");
+
             state.foundNumber = state.bars[state.median];
             state.binaryFoundIndex = state.median;
             console.log(state.binaryFoundIndex);

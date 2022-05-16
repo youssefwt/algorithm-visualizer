@@ -27,12 +27,27 @@ export const StyledBar = styled.div`
       ? "lightgreen"
       : "bisque"};
 
-  border: ${({ i, linearIndex, linearFoundIndex, isLinear, isSearching }) =>
-    i === linearFoundIndex && isLinear && isSearching
-      ? `2px solid green`
+  border: ${({
+    i,
+    linearIndex,
+    linearFoundIndex,
+    isLinear,
+    isSearching,
+    binaryFoundIndex,
+    start,
+    end,
+    median,
+    isBinary,
+  }) =>
+    (i === linearFoundIndex || i === binaryFoundIndex) && isSearching
+      ? `2px solid darkgreen`
       : i === linearIndex && !linearFoundIndex && isLinear && isSearching
-      ? `1px solid red`
-      : `none`};
+      ? `2px solid red`
+      : (i === start || i === end) && isSearching && !isLinear
+      ? `2px solid magenta`
+      : i === median && isSearching && !isLinear
+      ? `2px solid blue`
+      : "none"};
   margin: 0 2px;
   padding-top: ${({ bar }) => `${bar}px`};
 

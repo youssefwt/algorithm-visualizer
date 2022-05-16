@@ -58,10 +58,10 @@ export const Aside = () => {
     // dispatch(bubbleSorter(v));
     setInterval(() => {
       dispatch(bubbleSorter(v));
-    }, 100);
+    }, 50);
   };
 
-  if (sorted) {
+  if (sorted && !isSearching) {
     clearIntervals();
   }
   /***************************************************************** */
@@ -71,6 +71,8 @@ export const Aside = () => {
     notFound.current = false;
     dispatch(stopActions());
     clearIntervals();
+    //dispatch linearSearcher one time first to switch isSearching to true
+    dispatch(linearSearcher(searchFor * 1));
     if (searchFor) {
       setInterval(() => {
         dispatch(linearSearcher(searchFor * 1));
@@ -92,14 +94,16 @@ export const Aside = () => {
 
   /**binarySearcher */
   const binarySearch = () => {
-    notFound.current = false;
-    dispatch(stopActions());
-    clearIntervals();
-    if (searchFor) {
-      // setInterval(() => {
-      //   dispatch(binarySearcher(searchFor * 1));
-      // }, 500);
+    if (sorted) {
+      notFound.current = false;
+      dispatch(stopActions());
+      clearIntervals();
       dispatch(binarySearcher(searchFor * 1));
+      if (searchFor) {
+        setInterval(() => {
+          dispatch(binarySearcher(searchFor * 1));
+        }, 500);
+      }
     }
   };
 
