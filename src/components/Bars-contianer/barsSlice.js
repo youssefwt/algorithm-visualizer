@@ -99,7 +99,8 @@ export const barsSlice = createSlice({
 
     /**stop actions */
     stopActions: (state, action) => {
-      if (action.payload === "range") state.sorted = false;
+      if (action.payload === "range" || action.payload === "reset")
+        state.sorted = false;
       state.loops = 0;
       state.isBubble = false;
       state.foundNumber = null;
@@ -190,6 +191,8 @@ export const barsSlice = createSlice({
       state.isSearching = true;
       state.isLinear = true;
       state.isBinary = false;
+      state.linearFoundIndex = null;
+      state.foundNumber = null;
 
       if (state.linearIndex < state.bars.length) {
         if (action.payload === state.bars[state.linearIndex]) {
@@ -206,11 +209,19 @@ export const barsSlice = createSlice({
       state.isSearching = true;
       state.isBinary = true;
       state.isLinear = false;
+      if (foundNumber) {
+        state.foundNumber = null;
+        state.binaryFoundIndex = null;
+        state.start = 0;
+        state.end = state.bars.length - 1; //here now !!!
+        state.median = Math.floor((state.end - state.start) / 2);
+      }
 
       console.log(state.bars[0]);
       console.log(state.start);
       console.log(state.end);
       console.log(state.median);
+
       if (state.sorted) {
         if (state.start <= state.end) {
           state.median =
@@ -232,6 +243,9 @@ export const barsSlice = createSlice({
           }
         } else {
           state.foundNumber = "not-found";
+          state.start = 0;
+          state.end = state.bars.length - 1; //here now !!!
+          state.median = Math.floor((state.end - state.start) / 2);
         }
       }
     },

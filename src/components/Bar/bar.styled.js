@@ -6,8 +6,6 @@ export const Container = styled.div`
 `;
 
 export const StyledBar = styled.div`
-  /* display: inline-block; */
-
   background-color: ${({
     i,
     outer,
@@ -55,3 +53,34 @@ export const StyledBar = styled.div`
   transform: rotate(-180deg);
   align-self: flex-end;
 `;
+
+// export const StyledBar = styled.div.attrs(({ style }) => ({
+//   style: style,
+// }))`
+//   margin: 0 2px;
+//   padding-top: ${({ bar }) => `${bar}px`};
+//   border: ${({
+//     i,
+//     linearIndex,
+//     linearFoundIndex,
+//     isLinear,
+//     isSearching,
+//     binaryFoundIndex,
+//     start,
+//     end,
+//     median,
+//     isBinary,
+//   }) =>
+//     (i === linearFoundIndex || i === binaryFoundIndex) && isSearching
+//       ? `2px solid darkgreen`
+//       : i === linearIndex && !linearFoundIndex && isLinear && isSearching
+//       ? `2px solid red`
+//       : (i === start || i === end) && isSearching && !isLinear
+//       ? `2px solid magenta`
+//       : i === median && isSearching && !isLinear
+//       ? `2px solid blue`
+//       : "none"};
+//   writing-mode: tb-rl;
+//   transform: rotate(-180deg);
+//   align-self: flex-end;
+// `;
